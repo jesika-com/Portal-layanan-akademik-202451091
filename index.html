@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Layanan Akademik - Universitas Pattimura</title>
+    <style>
+        /* --- CSS Reset & Variabel Dasar --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary-color: #0d47a1;
+            --primary-dark: #002171;
+            --accent-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --text-light: #555555;
+            --white: #ffffff;
+            --border-color: #dcdde1;
+            --focus-ring: 3px solid #f39c12;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            color: var(--text-color);
+            background-color: var(--accent-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* --- Aksesibilitas: Fokus Keyboard --- */
+        a:focus, button:focus, input:focus, select:focus, textarea:focus {
+            outline: var(--focus-ring);
+            outline-offset: 2px;
+        }
+
+        /* --- 1. HALAMAN DEPAN TERPISAH (Background Foto Gedung Full Layar & Tanpa Kotak Biru) --- */
+        .welcome-screen {
+            min-height: 100vh;
+            /* Foto gedung tampil penuh sebagai background dengan sedikit efek gelap transparan tipis agar teks tetap terbaca */
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('fotogedung.jpeg') no-repeat center center/cover;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .welcome-content {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .welcome-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.25rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.8);
+        }
+
+        .welcome-content p {
+            font-size: 1.25rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            line-height: 1.8;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+        }
+
+        .btn-enter {
+            display: inline-block;
+            background-color: #f39c12;
+            color: var(--primary-dark);
+            padding: 0.9rem 2.25rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn-enter:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        /* --- 2. HEADER & NAVIGASI UTAMA (SETELAH MASUK) --- */
+        .site-header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1.5rem 0;
+            text-align: center;
+            border-bottom: 4px solid #f39c12;
+        }
+
+        .site-title {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+        }
+
+        .site-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .site-nav {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 0.75rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .site-nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .site-nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .site-nav a:hover {
+            color: #f39c12;
+            text-decoration: underline;
+        }
+
+        /* --- Konten Utama & Beranda --- */
+        .site-main {
+            padding: 2.5rem 0;
+        }
+
+        .beranda-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .beranda-section h2 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .beranda-section p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+        }
+
+        /* --- Kartu Layanan --- */
+        .services-section h2 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .services-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .service-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-top: 4px solid var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-dark);
+        }
+
+        .service-card p {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1.25rem;
+        }
+
+        .btn-card {
+            align-self: flex-start;
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-card:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* --- Form Permohonan --- */
+        .form-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .form-section h2 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-desc {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .required {
+            color: #d9534f;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            background-color: var(--primary-dark);
+            color: var(--white);
+            text-align: center;
+            padding: 1.5rem 0;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+        }
+
+        /* --- Responsive Design / Breakpoints --- */
+        @media (min-width: 768px) {
+            .welcome-content h1 {
+                font-size: 3rem;
+            }
+            .site-title {
+                font-size: 2.1rem;
+            }
+            .services-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+            .btn-submit {
+                width: auto;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. HALAMAN DEPAN TERPISAH (Background Foto Gedung Full Layar & Tanpa Kotak Biru) -->
+    <section class="welcome-screen" id="halaman-depan">
+        <div class="welcome-content">
+            <h1>Selamat Datang di Portal Layanan Akademik</h1>
+            <p>Platform digital resmi sistem administrasi dokumen dan layanan kemahasiswaan Universitas Pattimura. Silakan masuk ke dalam portal untuk mulai memilih layanan atau mengajukan permohonan.</p>
+            <a href="#portal-utama" class="btn-enter">Masuk ke Portal</a>
+        </div>
+    </section>
+
+    <!-- 2. HALAMAN UTAMA (Beranda, Layanan, Form) -->
+    <div id="portal-utama">
+        
+        <!-- Header Semantik -->
+        <header class="site-header">
+            <div class="container">
+                <h1 class="site-title">Portal Layanan Akademik</h1>
+                <p class="site-subtitle">Sistem Administrasi Dokumen & Layanan Kemahasiswaan Terpadu</p>
+            </div>
+        </header>
+
+        <!-- Navigasi Semantik -->
+        <nav class="site-nav" aria-label="Navigasi Utama">
+            <div class="container">
+                <ul>
+                    <li><a href="#halaman-depan">Beranda Depan</a></li>
+                    <li><a href="#layanan">Layanan</a></li>
+                    <li><a href="#permohonan">Form Permohonan</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Konten Utama Semantik -->
+        <main class="site-main">
+            <div class="container">
+                
+                <!-- Section Beranda -->
+                <section class="beranda-section" id="beranda">
+                    <h2>Beranda Utama</h2>
+                    <p>Halaman ini menyajikan informasi ringkas mengenai akses cepat layanan akademik universitas. Pastikan Anda membaca ketentuan setiap layanan sebelum mengisi formulir permohonan di bawah.</p>
+                </section>
+
+                <!-- Section 3 Kartu Layanan -->
+                <section id="layanan" class="services-section">
+                    <h2>Pilihan Layanan Akademik</h2>
+                    <div class="services-grid">
+                        
+                        <article class="service-card">
+                            <h3>Surat Aktif Kuliah</h3>
+                            <p>Pengajuan surat keterangan aktif terdaftar sebagai mahasiswa aktif untuk keperluan tunjangan orang tua, beasiswa, atau instansi terkait.</p>
+                            <a href="#permohonan" class="btn-card">Ajukan Layanan</a>
+                        </article>
+
+                        <article class="service-card">
+                            <h3>Transkrip Sementara</h3>
+                            <p>Permintaan dokumen transkrip nilai akademik sementara yang memuat seluruh mata kuliah yang telah ditempuh beserta IPK.</p>
+                            <a href="#permohonan" class="btn-card">Ajukan Layanan</a>
+                        </article>
+
+                        <article class="service-card">
+                            <h3>Cuti Akademik</h3>
+                            <p>Formulir pengajuan permohonan status cuti kuliah resmi bagi mahasiswa yang berhalangan mengikuti perkuliahan pada semester berjalan.</p>
+                            <a href="#permohonan" class="btn-card">Ajukan Layanan</a>
+                        </article>
+
+                    </div>
+                </section>
+
+                <!-- Section Form Permohonan -->
+                <section id="permohonan" class="form-section">
+                    <h2>Formulir Permohonan Layanan</h2>
+                    <p class="form-desc">Silakan isi data diri dan detail permohonan Anda dengan benar pada formulir di bawah ini.</p>
+                    
+                    <form action="#" method="POST" class="academic-form">
+                        
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap <span class="required">*</span></label>
+                            <input type="text" id="nama" name="nama" required placeholder="Masukkan nama lengkap Anda">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Mahasiswa <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" required placeholder="nama@student.ac.id">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="jenis_layanan">Jenis Layanan <span class="required">*</span></label>
+                            <select id="jenis_layanan" name="jenis_layanan" required>
+                                <option value="">-- Pilih Jenis Layanan --</option>
+                                <option value="surat_aktif">Surat Aktif Kuliah</option>
+                                <option value="transkrip">Transkrip Sementara</option>
+                                <option value="cuti">Cuti Akademik</option>
+                                <option value="legalisir">Permohonan Legalisir</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="keperluan">Keperluan / Keterangan Tambahan <span class="required">*</span></label>
+                            <textarea id="keperluan" name="keperluan" rows="4" required placeholder="Jelaskan secara wajar untuk keperluan apa dokumen ini diajukan"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Kirim Permohonan</button>
+                    </form>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Footer Semantik -->
+        <footer class="site-footer">
+            <div class="container">
+                <p>&copy; 2026 Portal Layanan Akademik. Universitas Pattimura.</p>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>
